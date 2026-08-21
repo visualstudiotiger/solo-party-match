@@ -202,20 +202,9 @@ export const ParticipantDashboard: React.FC = () => {
 
           <div className="flex items-center gap-2">
             {activeUser ? (
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs text-amber-300 font-bold bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-lg">
-                  🟢 {activeUser.nickname} (T{activeUser.tableNo})
-                </span>
-
-                {/* Optional collapsed dev switcher button */}
-                <button
-                  onClick={() => setShowDevSwitcher(!showDevSwitcher)}
-                  className="text-[10px] text-slate-400 hover:text-slate-200 bg-slate-900 px-1.5 py-1 rounded border border-slate-800"
-                  title="개발용 참가자 계정 전환"
-                >
-                  🧪 {showDevSwitcher ? '닫기' : '전환'}
-                </button>
-              </div>
+              <span className="text-xs text-amber-300 font-bold bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-lg">
+                🟢 {activeUser.nickname} (T{activeUser.tableNo})
+              </span>
             ) : (
               <button
                 onClick={() => {
@@ -229,36 +218,6 @@ export const ParticipantDashboard: React.FC = () => {
             )}
           </div>
         </header>
-
-        {/* Dev Mode Collapsible Switcher Bar */}
-        {showDevSwitcher && (
-          <div className="bg-purple-950/80 border-b border-purple-500/40 px-4 py-2 flex items-center justify-between text-xs animate-fadeIn">
-            <div className="flex items-center gap-2">
-              <span className="text-purple-300 font-bold">🧪 개발 시뮬레이션:</span>
-              <select
-                value={activeUser?.id || ''}
-                onChange={(e) => setCurrentUserId(e.target.value)}
-                className="bg-slate-900 border border-purple-500/40 text-amber-300 text-[11px] rounded-lg px-2 py-1 focus:outline-none"
-              >
-                {participants.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nickname} ({p.gender === 'M' ? '남' : '여'}, T{p.tableNo})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              onClick={() => {
-                setProfileFormMode('CREATE');
-                setIsProfileModalOpen(true);
-              }}
-              className="text-[10px] font-bold text-pink-300 bg-pink-500/20 border border-pink-500/40 px-2 py-0.5 rounded-lg hover:bg-pink-500/30"
-            >
-              + 다른 인원 추가
-            </button>
-          </div>
-        )}
 
         {/* Profile Info Header / Join Party Hero Card */}
         <div className="p-4 bg-gradient-to-b from-[#1c122b] to-[#140c20] border-b border-slate-800/80">

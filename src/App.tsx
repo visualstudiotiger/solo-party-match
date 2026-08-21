@@ -12,9 +12,9 @@ export const App: React.FC = () => {
   const [isDevToolbarOpen, setIsDevToolbarOpen] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       const saved = sessionStorage.getItem(DEV_TOOLBAR_KEY);
-      return saved !== null ? saved === 'true' : true;
+      return saved !== null ? saved === 'true' : false;
     }
-    return true;
+    return false;
   });
 
   const [isHostAuthenticated, setIsHostAuthenticated] = useState<boolean>(() => {
@@ -98,17 +98,6 @@ export const App: React.FC = () => {
             </button>
           </div>
         </nav>
-      )}
-
-      {/* Floating Button to Reopen Dev Toolbar if closed */}
-      {!isDevToolbarOpen && (
-        <button
-          onClick={toggleDevToolbar}
-          className="fixed bottom-4 right-4 z-50 px-3 py-2 bg-amber-500 text-slate-950 hover:bg-amber-400 font-extrabold text-xs rounded-xl shadow-2xl flex items-center gap-1.5 border border-amber-300 transition animate-bounce"
-          title="개발 시뮬레이션 툴바 열기"
-        >
-          <Sliders size={14} /> 🛠️ 시뮬레이터 툴바 열기
-        </button>
       )}
 
       {/* Main Content Area */}
