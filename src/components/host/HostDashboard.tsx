@@ -20,13 +20,20 @@ import {
   Flame,
   Dices,
   LogOut,
+  Sliders,
 } from 'lucide-react';
 
 interface HostDashboardProps {
   onLogout?: () => void;
+  isDevToolbarOpen?: boolean;
+  onToggleDevToolbar?: () => void;
 }
 
-export const HostDashboard: React.FC<HostDashboardProps> = ({ onLogout }) => {
+export const HostDashboard: React.FC<HostDashboardProps> = ({
+  onLogout,
+  isDevToolbarOpen,
+  onToggleDevToolbar,
+}) => {
   const {
     partyCode,
     roomName,
@@ -151,6 +158,21 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({ onLogout }) => {
               {isResultsRevealed ? <EyeOff size={16} /> : <Eye size={16} />}
               {isResultsRevealed ? '결과 공개 해제' : '📢 최종 매칭 결과 & 연락처 모바일 전송 공개!'}
             </button>
+
+            {onToggleDevToolbar && (
+              <button
+                onClick={onToggleDevToolbar}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 shadow ${
+                  isDevToolbarOpen
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30'
+                    : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'
+                }`}
+                title="상단 개발 시뮬레이션 툴바(참가자/사회자 화면 전환 바)를 열거나 닫습니다."
+              >
+                <Sliders size={14} className="text-amber-400" />
+                {isDevToolbarOpen ? '🛠️ 시뮬레이터 툴바 닫기' : '🛠️ 시뮬레이터 툴바 열기'}
+              </button>
+            )}
 
             {onLogout && (
               <button
