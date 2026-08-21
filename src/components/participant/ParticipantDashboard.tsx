@@ -335,7 +335,7 @@ export const ParticipantDashboard: React.FC = () => {
                 }`}
               >
                 <span>전체</span>
-                <span className="text-[9px] opacity-80">{participants.length - 1}명</span>
+                <span className="text-[9px] opacity-80">{filteredParticipants.length}명</span>
               </button>
 
               <button
