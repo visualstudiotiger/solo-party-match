@@ -38,6 +38,7 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
     partyCode,
     roomName,
     currentStep,
+    tablesCount,
     participants,
     selections,
     isResultsRevealed,
@@ -69,10 +70,12 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
     { step: 'RESULT_ANNOUNCE', label: '7. 결과 발표', desc: '1순위/2순위 매칭 & 연락처 공개' },
   ];
 
-  // Rotation logic: Shift males to next table (1->2, 2->3... 5->1)
+  const totalTables = tablesCount || 4;
+
+  // Rotation logic: Shift males to next table (1->2, 2->3... max->1)
   const handleAutoRotateTables = () => {
     maleList.forEach((m) => {
-      const nextTable = m.tableNo >= 5 ? 1 : m.tableNo + 1;
+      const nextTable = m.tableNo >= totalTables ? 1 : m.tableNo + 1;
       updateTableAssignment(m.id, nextTable, m.seatNo);
     });
     alert('남성 참가자들의 테이블 배치가 다음 번호로 로테이션되었습니다! 🔄');
@@ -80,9 +83,9 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
 
   // Smart Seating Recommendation
   const handleSmartSeatingByFirstImpression = () => {
-    alert('✨ 첫인상 1차 선택 호감도를 분석하여 호감이 높은 참가자들끼리 1~5번 테이블에 최적 배치했습니다!');
+    alert(`✨ 첫인상 1차 선택 호감도를 분석하여 호감이 높은 참가자들끼리 1~${totalTables}번 테이블에 최적 배치했습니다!`);
     maleList.forEach((m, idx) => {
-      const tableNo = (idx % 5) + 1;
+      const tableNo = (idx % totalTables) + 1;
       updateTableAssignment(m.id, tableNo, (idx % 2) + 1);
     });
   };
@@ -142,9 +145,9 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
             <button
               onClick={resetDemoData}
               className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-300 flex items-center gap-1.5 transition"
-              title="20명 샘플 데모 데이터를 로드합니다."
+              title="16명 샘플 데모 데이터를 로드합니다."
             >
-              <Dices size={14} className="text-amber-400" /> 🎲 데모 20명 로드
+              <Dices size={14} className="text-amber-400" /> 🎲 데모 16명 로드
             </button>
 
             <button
@@ -543,8 +546,8 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
             </div>
 
             {/* Tables Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {[1, 2, 3, 4, 5].map((tableNo) => {
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {Array.from({ length: totalTables }, (_, i) => i + 1).map((tableNo) => {
                 const tableParticipants = participants.filter((p) => p.tableNo === tableNo);
 
                 return (

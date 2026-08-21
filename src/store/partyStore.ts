@@ -106,7 +106,7 @@ const loadInitialState = (): PartyState => {
     partyCode: INITIAL_PARTY_CODE,
     roomName: INITIAL_ROOM_NAME,
     currentStep: 'WAITING',
-    tablesCount: 5,
+    tablesCount: 4,
     seatsPerTable: 4,
     participants: [],
     selections: [],
@@ -125,10 +125,30 @@ const loadInitialState = (): PartyState => {
       const roomName = parsed.roomName && parsed.roomName.includes('MELLOWHOUSE')
         ? INITIAL_ROOM_NAME
         : (parsed.roomName || INITIAL_ROOM_NAME);
+
+      const storedParticipants = parsed.participants || [];
+      const isOld20Demo = storedParticipants.some((p: any) => p.id === 'm9' || p.id === 'm10' || p.id === 'f9' || p.id === 'f10');
+
+      if (isOld20Demo) {
+        const freshSelections = generateDemoFirstImpressionSelections(INITIAL_PARTICIPANTS);
+        return {
+          partyCode: INITIAL_PARTY_CODE,
+          roomName: INITIAL_ROOM_NAME,
+          currentStep: 'FIRST_IMPRESSION',
+          tablesCount: 4,
+          seatsPerTable: 4,
+          participants: INITIAL_PARTICIPANTS,
+          selections: freshSelections,
+          isResultsRevealed: false,
+          notes: {},
+        };
+      }
+
       return {
         ...parsed,
         roomName,
-        participants: parsed.participants || [],
+        tablesCount: parsed.tablesCount || 4,
+        participants: storedParticipants,
         selections: parsed.selections || [],
       };
     }
@@ -347,7 +367,8 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
       const isMale = participantData.gender !== 'F';
       const genderPrefix = isMale ? 'm' : 'f';
 
-      const tableNo = (Math.floor(currentCount / 4) % 5) + 1;
+      const numTables = get().tablesCount || 4;
+      const tableNo = (Math.floor(currentCount / 4) % numTables) + 1;
       const seatNo = (currentCount % 4) + 1;
 
       const newId = `${genderPrefix}_${Date.now()}`;
@@ -397,7 +418,7 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
         partyCode: INITIAL_PARTY_CODE,
         roomName: INITIAL_ROOM_NAME,
         currentStep: 'WAITING',
-        tablesCount: 5,
+        tablesCount: 4,
         seatsPerTable: 4,
         participants: [],
         selections: [],
@@ -415,7 +436,7 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
         partyCode: INITIAL_PARTY_CODE,
         roomName: INITIAL_ROOM_NAME,
         currentStep: 'FIRST_IMPRESSION',
-        tablesCount: 5,
+        tablesCount: 4,
         seatsPerTable: 4,
         participants: INITIAL_PARTICIPANTS,
         selections: freshSelections,

@@ -35,6 +35,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
     partyCode,
     roomName,
     currentStep,
+    tablesCount,
     participants,
     selections,
     isResultsRevealed,
@@ -707,7 +708,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                       className="bg-slate-900 border border-slate-800 text-amber-300 text-[11px] rounded-lg px-2 py-1 focus:outline-none"
                     >
                       <option value="ALL">전체</option>
-                      {[1, 2, 3, 4, 5].map((t) => (
+                      {Array.from({ length: tablesCount || 4 }, (_, i) => i + 1).map((t) => (
                         <option key={t} value={t}>
                           테이블 {t}
                         </option>

@@ -4,7 +4,7 @@ export const INITIAL_PARTY_CODE = 'ROOM1216';
 export const INITIAL_ROOM_NAME = 'SOLO PARTY [블라인드 살롱 (Blind Salon)]';
 
 export const INITIAL_PARTICIPANTS: Participant[] = [
-  // 남성 10명
+  // 남성 8명 (테이블 1~4)
   {
     id: 'm1',
     nickname: '호야',
@@ -165,48 +165,8 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
       weekendHobby: '야외 드라이브',
     },
   },
-  {
-    id: 'm9',
-    nickname: '케빈',
-    realName: '서지훈',
-    gender: 'M',
-    age: '34',
-    job: '게임 3D 그래픽 아티스트',
-    bio: '상상력이 풍부하고 유머러스합니다. 같이 웃을 수 있는 분!',
-    tableNo: 5,
-    seatNo: 1,
-    avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
-    phone: '010-9012-3456',
-    maritalStatus: '미혼',
-    hasChildren: '자녀 없음',
-    loveStyle: {
-      relationshipType: '친구같은 연애',
-      dateStyle: '삼겹살에 소주파',
-      weekendHobby: '집에서 넷플릭스',
-    },
-  },
-  {
-    id: 'm10',
-    nickname: '레오',
-    realName: '권영진',
-    gender: 'M',
-    age: '35',
-    job: '항공사 조종사',
-    bio: '여행과 힐링을 좋아합니다. 여유로운 마음으로 파티 참석!',
-    tableNo: 5,
-    seatNo: 2,
-    avatarUrl: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80',
-    phone: '010-0123-4567',
-    maritalStatus: '미혼',
-    hasChildren: '자녀 없음',
-    loveStyle: {
-      relationshipType: '완전 설레는 연애',
-      dateStyle: '파인다이닝파',
-      weekendHobby: '야외 드라이브',
-    },
-  },
 
-  // 여성 10명
+  // 여성 8명 (테이블 1~4)
   {
     id: 'f1',
     nickname: '루시',
@@ -364,46 +324,6 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     loveStyle: {
       relationshipType: '친구같은 연애',
       dateStyle: '삼겹살에 소주파',
-      weekendHobby: '야외 드라이브',
-    },
-  },
-  {
-    id: 'f9',
-    nickname: '카밀라',
-    realName: '서예진',
-    gender: 'F',
-    age: '35',
-    job: '금융공기업 차장',
-    bio: '차분하고 생각이 깊은 사람을 조용히 좋아합니다.',
-    tableNo: 5,
-    seatNo: 3,
-    avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
-    phone: '010-1098-7654',
-    maritalStatus: '돌싱',
-    hasChildren: '자녀 없음',
-    loveStyle: {
-      relationshipType: '친구같은 연애',
-      dateStyle: '삼겹살에 소주파',
-      weekendHobby: '집에서 넷플릭스',
-    },
-  },
-  {
-    id: 'f10',
-    nickname: '헤일리',
-    realName: '권지민',
-    gender: 'F',
-    age: '32',
-    job: '글로벌 IT HR',
-    bio: '사람들과 소통하는 것을 진심으로 좋아하는 밝은 성격!',
-    tableNo: 5,
-    seatNo: 4,
-    avatarUrl: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80',
-    phone: '010-0987-6543',
-    maritalStatus: '미혼',
-    hasChildren: '자녀 없음',
-    loveStyle: {
-      relationshipType: '완전 설레는 연애',
-      dateStyle: '파인다이닝파',
       weekendHobby: '야외 드라이브',
     },
   },
