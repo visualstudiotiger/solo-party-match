@@ -93,9 +93,14 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({ onLogout }) => {
               <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 font-extrabold flex items-center justify-center shadow-lg">
                 <Crown size={18} />
               </div>
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold text-amber-400 tracking-wider uppercase">
                 사회자 전용 관리자 대시보드
               </span>
+              <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/40 flex items-center gap-1.5 shadow">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> 🟢 인터넷 실시간 다기기 동기화
+              </span>
+            </div>
             </div>
             <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
               {roomName}

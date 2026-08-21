@@ -139,6 +139,81 @@ const loadInitialState = (): PartyState => {
   return emptyDefault;
 };
 
+const CLIENT_ID = typeof window !== 'undefined'
+  ? (window as any).__SOLOPARTY_CLIENT_ID || ((window as any).__SOLOPARTY_CLIENT_ID = 'client_' + Math.random().toString(36).substring(2, 9))
+  : 'server';
+
+let lastCloudSyncTimestamp = 0;
+
+const publishCloudSync = (fullState: any) => {
+  if (typeof window === 'undefined') return;
+  try {
+    const partyCode = fullState.partyCode || INITIAL_PARTY_CODE;
+    const channelId = `soloparty_${partyCode}`;
+    const payloadData = {
+      senderId: CLIENT_ID,
+      payload: fullState,
+      timestamp: Date.now(),
+    };
+    lastCloudSyncTimestamp = payloadData.timestamp;
+    const url = `https://ps.pubnub.com/publish/demo/demo/0/${channelId}/0/${encodeURIComponent(JSON.stringify(payloadData))}`;
+    fetch(url).catch(() => {});
+  } catch (e) {
+    console.error('Cloud sync publish error:', e);
+  }
+};
+
+export const fetchCloudSync = async () => {
+  if (typeof window === 'undefined') return;
+  try {
+    const partyCode = usePartyStore.getState().partyCode || INITIAL_PARTY_CODE;
+    const channelId = `soloparty_${partyCode}`;
+    const url = `https://ps.pubnub.com/v2/history/sub-key/demo/channel/${channelId}?count=3`;
+    const res = await fetch(url);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data) && Array.isArray(data[0]) && data[0].length > 0) {
+      const latestMsg = data[0][data[0].length - 1];
+      if (
+        latestMsg &&
+        latestMsg.payload &&
+        latestMsg.senderId !== CLIENT_ID &&
+        latestMsg.timestamp > lastCloudSyncTimestamp
+      ) {
+        lastCloudSyncTimestamp = latestMsg.timestamp;
+        const currentLocal = usePartyStore.getState();
+
+        // Merge participants cleanly so no mobile or host participant is lost
+        const participantMap = new Map<string, Participant>();
+        currentLocal.participants.forEach((p) => participantMap.set(p.id, p));
+        (latestMsg.payload.participants || []).forEach((p: Participant) => participantMap.set(p.id, p));
+
+        // Merge selections
+        const selectionKeys = new Set<string>();
+        const mergedSelections: Selection[] = [];
+        [...currentLocal.selections, ...(latestMsg.payload.selections || [])].forEach((s) => {
+          const key = `${s.fromId}_${s.toId}_${s.round}_${s.rank}`;
+          if (!selectionKeys.has(key)) {
+            selectionKeys.add(key);
+            mergedSelections.push(s);
+          }
+        });
+
+        const mergedState: Partial<PartyState> = {
+          ...latestMsg.payload,
+          participants: Array.from(participantMap.values()),
+          selections: mergedSelections,
+        };
+
+        usePartyStore.setState(mergedState as any);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedState));
+      }
+    }
+  } catch (e) {
+    // Silent catch
+  }
+};
+
 export const usePartyStore = create<PartyStoreState>((set, get) => {
   const initial = loadInitialState();
 
@@ -158,6 +233,7 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(fullState));
       channel?.postMessage({ type: 'STATE_SYNC', payload: fullState });
+      publishCloudSync(fullState);
     } catch (e) {
       console.error('Failed to sync state', e);
     }
@@ -404,4 +480,8 @@ if (typeof window !== 'undefined') {
       }
     }
   });
+
+  // Auto-fetch Cloud sync every 2 seconds for real-time multi-device sync across internet
+  setTimeout(() => fetchCloudSync(), 300);
+  setInterval(() => fetchCloudSync(), 2000);
 }
