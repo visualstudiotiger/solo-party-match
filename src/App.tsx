@@ -1,10 +1,34 @@
 import React, { useState } from 'react';
 import { ParticipantDashboard } from './components/participant/ParticipantDashboard';
 import { HostDashboard } from './components/host/HostDashboard';
-import { Smartphone, Crown, Info } from 'lucide-react';
+import { HostLoginModal } from './components/host/HostLoginModal';
+import { Smartphone, Crown } from 'lucide-react';
+
+const HOST_AUTH_KEY = 'soloparty_host_auth';
 
 export const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<'PARTICIPANT' | 'HOST'>('PARTICIPANT');
+  const [isHostAuthenticated, setIsHostAuthenticated] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem(HOST_AUTH_KEY) === 'true';
+    }
+    return false;
+  });
+
+  const handleLoginSuccess = () => {
+    setIsHostAuthenticated(true);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(HOST_AUTH_KEY, 'true');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsHostAuthenticated(false);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem(HOST_AUTH_KEY);
+    }
+    setViewMode('PARTICIPANT');
+  };
 
   return (
     <div className="min-h-screen bg-[#0d0814] text-slate-100 flex flex-col">
@@ -47,7 +71,18 @@ export const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {viewMode === 'PARTICIPANT' ? <ParticipantDashboard /> : <HostDashboard />}
+        {viewMode === 'PARTICIPANT' ? (
+          <ParticipantDashboard />
+        ) : isHostAuthenticated ? (
+          <HostDashboard onLogout={handleLogout} />
+        ) : (
+          <div className="min-h-[calc(100vh-60px)] flex items-center justify-center p-4">
+            <HostLoginModal
+              onLoginSuccess={handleLoginSuccess}
+              onCancel={() => setViewMode('PARTICIPANT')}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

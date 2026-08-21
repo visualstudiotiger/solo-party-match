@@ -19,9 +19,14 @@ import {
   Sparkle,
   Flame,
   Dices,
+  LogOut,
 } from 'lucide-react';
 
-export const HostDashboard: React.FC = () => {
+interface HostDashboardProps {
+  onLogout?: () => void;
+}
+
+export const HostDashboard: React.FC<HostDashboardProps> = ({ onLogout }) => {
   const {
     partyCode,
     roomName,
@@ -135,6 +140,16 @@ export const HostDashboard: React.FC = () => {
               {isResultsRevealed ? <EyeOff size={16} /> : <Eye size={16} />}
               {isResultsRevealed ? '결과 공개 해제' : '📢 최종 매칭 결과 & 연락처 모바일 전송 공개!'}
             </button>
+
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition"
+                title="사회자 로그아웃"
+              >
+                <LogOut size={14} className="text-amber-400" /> 로그아웃
+              </button>
+            )}
           </div>
         </header>
 
