@@ -97,9 +97,15 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({ onLogout }) => {
               <span className="text-xs font-bold text-amber-400 tracking-wider uppercase">
                 사회자 전용 관리자 대시보드
               </span>
-              <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/40 flex items-center gap-1.5 shadow">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> 🟢 인터넷 실시간 다기기 동기화
-              </span>
+              {typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? (
+                <span className="text-[10px] font-extrabold text-blue-300 bg-blue-950/80 px-2.5 py-0.5 rounded-full border border-blue-500/40 flex items-center gap-1.5 shadow">
+                  🔒 로컬 컴퓨터 독립 테스트 모드 (스마트폰에 영향 없음)
+                </span>
+              ) : (
+                <span className="text-[10px] font-extrabold text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/40 flex items-center gap-1.5 shadow">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /> 🟢 인터넷 실시간 다기기 동기화
+                </span>
+              )}
             </div>
             </div>
             <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">

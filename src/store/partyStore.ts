@@ -139,6 +139,9 @@ const loadInitialState = (): PartyState => {
   return emptyDefault;
 };
 
+const isLocalhost = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 const CLIENT_ID = typeof window !== 'undefined'
   ? (window as any).__SOLOPARTY_CLIENT_ID || ((window as any).__SOLOPARTY_CLIENT_ID = 'client_' + Math.random().toString(36).substring(2, 9))
   : 'server';
@@ -147,6 +150,9 @@ let lastCloudSyncTimestamp = 0;
 
 const publishCloudSync = (fullState: any) => {
   if (typeof window === 'undefined') return;
+  // If running on local computer (localhost/127.0.0.1), completely disable Cloud Sync so local PC testing never affects external smartphones!
+  if (isLocalhost) return;
+
   try {
     const partyCode = fullState.partyCode || INITIAL_PARTY_CODE;
     const channelId = `soloparty_${partyCode}`;
@@ -165,6 +171,8 @@ const publishCloudSync = (fullState: any) => {
 
 export const fetchCloudSync = async () => {
   if (typeof window === 'undefined') return;
+  // If running on local computer (localhost/127.0.0.1), completely disable Cloud Sync so local PC testing never affects external smartphones!
+  if (isLocalhost) return;
   try {
     const partyCode = usePartyStore.getState().partyCode || INITIAL_PARTY_CODE;
     const channelId = `soloparty_${partyCode}`;
