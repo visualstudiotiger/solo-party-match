@@ -67,7 +67,7 @@ export const HostLoginModal: React.FC<HostLoginModalProps> = ({ onLoginSuccess, 
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="아이디 입력 (soloparty)"
+                placeholder="사회자 아이디를 입력하세요"
                 className="w-full bg-slate-900/90 border border-slate-700 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition"
                 autoFocus
               />
@@ -83,7 +83,7 @@ export const HostLoginModal: React.FC<HostLoginModalProps> = ({ onLoginSuccess, 
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호 입력 (1357)"
+                placeholder="비밀번호를 입력하세요"
                 className="w-full bg-slate-900/90 border border-slate-700 focus:border-amber-400 focus:ring-1 focus:ring-amber-400 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition"
               />
             </div>
