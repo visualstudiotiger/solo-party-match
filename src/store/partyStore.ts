@@ -199,13 +199,20 @@ export const fetchCloudSync = async () => {
           }
         });
 
+        const localUserId = currentLocal.currentUserId;
+
         const mergedState: Partial<PartyState> = {
           ...latestMsg.payload,
           participants: Array.from(participantMap.values()),
           selections: mergedSelections,
         };
 
-        usePartyStore.setState(mergedState as any);
+        // Explicitly preserve THIS device's currentUserId
+        usePartyStore.setState({
+          ...mergedState,
+          currentUserId: localUserId,
+        } as any);
+
         localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedState));
       }
     }
@@ -464,7 +471,11 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
 if (channel) {
   channel.onmessage = (event) => {
     if (event.data?.type === 'STATE_SYNC') {
-      usePartyStore.setState(event.data.payload);
+      const localUserId = usePartyStore.getState().currentUserId;
+      usePartyStore.setState({
+        ...event.data.payload,
+        currentUserId: localUserId,
+      });
     }
   };
 }
@@ -474,7 +485,11 @@ if (typeof window !== 'undefined') {
     if (e.key === 'soloparty_state_v1' && e.newValue) {
       try {
         const parsed = JSON.parse(e.newValue);
-        usePartyStore.setState(parsed);
+        const localUserId = usePartyStore.getState().currentUserId;
+        usePartyStore.setState({
+          ...parsed,
+          currentUserId: localUserId,
+        });
       } catch (err) {
         console.error('Failed to parse storage update', err);
       }
