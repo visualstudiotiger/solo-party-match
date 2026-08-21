@@ -183,37 +183,35 @@ export const fetchCloudSync = async () => {
         lastCloudSyncTimestamp = latestMsg.timestamp;
         const currentLocal = usePartyStore.getState();
 
-        // Merge participants cleanly so no mobile or host participant is lost
-        const participantMap = new Map<string, Participant>();
-        currentLocal.participants.forEach((p) => participantMap.set(p.id, p));
-        (latestMsg.payload.participants || []).forEach((p: Participant) => participantMap.set(p.id, p));
+        let localUserId = currentLocal.currentUserId;
+        const newParticipants: Participant[] = latestMsg.payload.participants || [];
+        const newSelections: Selection[] = latestMsg.payload.selections || [];
 
-        // Merge selections
-        const selectionKeys = new Set<string>();
-        const mergedSelections: Selection[] = [];
-        [...currentLocal.selections, ...(latestMsg.payload.selections || [])].forEach((s) => {
-          const key = `${s.fromId}_${s.toId}_${s.round}_${s.rank}`;
-          if (!selectionKeys.has(key)) {
-            selectionKeys.add(key);
-            mergedSelections.push(s);
-          }
-        });
+        // If party was cleared/reset and localUserId is no longer valid, reset localUserId to null
+        if (localUserId && !newParticipants.some((p) => p.id === localUserId)) {
+          localUserId = null;
+        }
 
-        const localUserId = currentLocal.currentUserId;
-
-        const mergedState: Partial<PartyState> = {
-          ...latestMsg.payload,
-          participants: Array.from(participantMap.values()),
-          selections: mergedSelections,
+        const newState: Partial<PartyState> = {
+          partyCode: latestMsg.payload.partyCode || currentLocal.partyCode,
+          roomName: latestMsg.payload.roomName || currentLocal.roomName,
+          currentStep: latestMsg.payload.currentStep || 'WAITING',
+          tablesCount: latestMsg.payload.tablesCount || 5,
+          seatsPerTable: latestMsg.payload.seatsPerTable || 4,
+          participants: newParticipants,
+          selections: newSelections,
+          isResultsRevealed: typeof latestMsg.payload.isResultsRevealed === 'boolean'
+            ? latestMsg.payload.isResultsRevealed
+            : false,
+          notes: latestMsg.payload.notes || {},
         };
 
-        // Explicitly preserve THIS device's currentUserId
         usePartyStore.setState({
-          ...mergedState,
+          ...newState,
           currentUserId: localUserId,
         } as any);
 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedState));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
       }
     }
   } catch (e) {
