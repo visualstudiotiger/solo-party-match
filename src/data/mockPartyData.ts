@@ -1,7 +1,7 @@
 import { Participant } from '../types/party';
 
 export const INITIAL_PARTY_CODE = 'ROOM1216';
-export const INITIAL_ROOM_NAME = 'SOLO PARTY [MELLOWHOUSE]';
+export const INITIAL_ROOM_NAME = 'SOLO PARTY [블라인드 살롱 (Blind Salon)]';
 
 export const INITIAL_PARTICIPANTS: Participant[] = [
   // 남성 10명

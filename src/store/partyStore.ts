@@ -122,8 +122,12 @@ const loadInitialState = (): PartyState => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      const roomName = parsed.roomName && parsed.roomName.includes('MELLOWHOUSE')
+        ? INITIAL_ROOM_NAME
+        : (parsed.roomName || INITIAL_ROOM_NAME);
       return {
         ...parsed,
+        roomName,
         participants: parsed.participants || [],
         selections: parsed.selections || [],
       };
