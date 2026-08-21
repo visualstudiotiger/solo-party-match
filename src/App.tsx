@@ -103,7 +103,7 @@ export const App: React.FC = () => {
       {/* Main Content Area */}
       <main className="flex-1">
         {viewMode === 'PARTICIPANT' ? (
-          <ParticipantDashboard />
+          <ParticipantDashboard onOpenHostLogin={() => setViewMode('HOST')} />
         ) : isHostAuthenticated ? (
           <HostDashboard
             onLogout={handleLogout}

@@ -22,10 +22,15 @@ import {
   TrendingUp,
   History,
   MousePointerClick,
+  Crown,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-export const ParticipantDashboard: React.FC = () => {
+interface ParticipantDashboardProps {
+  onOpenHostLogin?: () => void;
+}
+
+export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOpenHostLogin }) => {
   const {
     partyCode,
     roomName,
@@ -877,6 +882,22 @@ export const ParticipantDashboard: React.FC = () => {
             onClose={() => setIsStepModalOpen(false)}
           />
         )}
+
+        {/* Bottom Host Login Access Footer */}
+        <footer className="mt-8 pt-4 pb-6 px-4 border-t border-slate-800/80 text-center space-y-2">
+          <p className="text-[11px] text-slate-500">
+            SOLO PARTY MATCH © 2026 • 참가자 전용 화면
+          </p>
+          {onOpenHostLogin && (
+            <button
+              onClick={onOpenHostLogin}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/10 to-amber-300/10 hover:from-amber-500/20 hover:to-amber-300/20 border border-amber-500/30 text-xs font-extrabold text-amber-300 transition shadow-sm"
+            >
+              <Crown size={14} className="text-amber-400" />
+              <span>👑 사회자(Host) 로그인 및 관리자 화면</span>
+            </button>
+          )}
+        </footer>
       </div>
     </div>
   );
