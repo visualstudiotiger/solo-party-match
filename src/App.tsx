@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { ParticipantDashboard } from './components/participant/ParticipantDashboard';
 import { HostDashboard } from './components/host/HostDashboard';
 import { HostLoginModal } from './components/host/HostLoginModal';
-import { Smartphone, Crown, Sliders, X } from 'lucide-react';
+import { usePartyStore } from './store/partyStore';
+import { Smartphone, Crown, X } from 'lucide-react';
 
 const HOST_AUTH_KEY = 'soloparty_host_auth';
 const DEV_TOOLBAR_KEY = 'soloparty_dev_toolbar_open';
 
 export const App: React.FC = () => {
+  const { setCurrentUserId } = usePartyStore();
   const [viewMode, setViewMode] = useState<'PARTICIPANT' | 'HOST'>('PARTICIPANT');
   const [isDevToolbarOpen, setIsDevToolbarOpen] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -49,6 +51,11 @@ export const App: React.FC = () => {
     setViewMode('PARTICIPANT');
   };
 
+  const handleSwitchToParticipant = (participantId: string) => {
+    setCurrentUserId(participantId);
+    setViewMode('PARTICIPANT');
+  };
+
   return (
     <div className="min-h-screen bg-[#0d0814] text-slate-100 flex flex-col relative">
       {/* Top View Mode Switcher Header for Pair Testing */}
@@ -63,7 +70,7 @@ export const App: React.FC = () => {
             </span>
           </div>
 
-          {/* View Switcher Toggle Buttons */}
+          {/* View Switcher Buttons */}
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
               <button
@@ -74,7 +81,7 @@ export const App: React.FC = () => {
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Smartphone size={14} /> 📱 참가자 모바일 화면
+                <Smartphone size={14} /> 📱 참가자 화면
               </button>
 
               <button
@@ -85,7 +92,7 @@ export const App: React.FC = () => {
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Crown size={14} /> 👑 사회자 대시보드
+                <Crown size={14} /> 👑 사회자 화면
               </button>
             </div>
 
@@ -109,6 +116,7 @@ export const App: React.FC = () => {
             onLogout={handleLogout}
             isDevToolbarOpen={isDevToolbarOpen}
             onToggleDevToolbar={toggleDevToolbar}
+            onSwitchToParticipant={handleSwitchToParticipant}
           />
         ) : (
           <div className="min-h-[calc(100vh-60px)] flex items-center justify-center p-4">
@@ -124,3 +132,4 @@ export const App: React.FC = () => {
 };
 
 export default App;
+

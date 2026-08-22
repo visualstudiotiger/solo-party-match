@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Participant, PartyStep } from '../../types/party';
-import { X, Heart, Sparkles, MessageSquare, Briefcase, Calendar, Lock, Users } from 'lucide-react';
+import { X, Heart, MessageSquare, Lock, Eye } from 'lucide-react';
 
 interface ParticipantCardModalProps {
   isOpen: boolean;
@@ -38,18 +38,6 @@ export const ParticipantCardModal: React.FC<ParticipantCardModalProps> = ({
 
   const isSameGender = activeUserGender ? target.gender === activeUserGender : false;
   const existingSelection = currentSelections.find((s) => s.toId === target.id);
-
-  // Progressive Unmasking Rules
-  const isBasicInfoUnlocked =
-    currentStep === 'FIRST_INTRO' ||
-    currentStep === 'FIRST_IMPRESSION' ||
-    currentStep === 'ROTATION' ||
-    currentStep === 'ROUND2_SELECT' ||
-    currentStep === 'FINAL_SELECT' ||
-    currentStep === 'RESULT_ANNOUNCE';
-
-  const isChildrenInfoUnlocked =
-    currentStep === 'FINAL_SELECT' || currentStep === 'RESULT_ANNOUNCE';
 
   const handleNoteSave = () => {
     onSaveNote(target.id, noteText);
@@ -95,62 +83,13 @@ export const ParticipantCardModal: React.FC<ParticipantCardModalProps> = ({
             </span>
           </h3>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300 mt-2">
-            {isBasicInfoUnlocked ? (
-              <>
-                <span className="flex items-center gap-1"><Calendar size={13} /> {target.age}세</span>
-                <span>•</span>
-                <span className="flex items-center gap-1"><Briefcase size={13} /> {target.job}</span>
-                <span>•</span>
-                <span className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/40 text-amber-300 font-bold text-[11px]">
-                  {target.maritalStatus || '미혼'}
-                </span>
-              </>
-            ) : (
-              <span className="text-pink-300/90 text-xs font-semibold bg-pink-950/40 border border-pink-500/30 px-3 py-1 rounded-full flex items-center gap-1">
-                <Lock size={12} /> 나이 / 직업 / 돌싱유무: 1차 자기소개 시 해금
-              </span>
-            )}
+          <div className="mt-2 text-xs text-amber-300/80 bg-amber-950/40 border border-amber-500/30 px-3 py-1 rounded-full flex items-center gap-1">
+            <Eye size={12} /> 블라인드 프로필 (대화로 알아가기 🥂)
           </div>
 
-          {/* 자녀 유무 해금 상태 */}
-          <div className="mt-2 text-xs">
-            {isChildrenInfoUnlocked ? (
-              <span className="px-2.5 py-0.5 rounded-md bg-purple-500/20 border border-purple-400/40 text-purple-300 font-bold text-[11px]">
-                👶 {target.hasChildren || '자녀 없음'}
-              </span>
-            ) : (
-              <span className="text-slate-400 text-[10px] italic">
-                🔒 자녀 유무: 최종 선택 전 해금
-              </span>
-            )}
-          </div>
-
-          <p className="text-xs text-slate-300 italic mt-3 bg-slate-900/60 border border-slate-800 rounded-xl p-2.5 w-full text-center">
-            "{target.bio || '안녕하세요! 파티 즐겁게 즐겨요 :)'}"
+          <p className="text-xs text-slate-200 italic mt-3 bg-slate-900/80 border border-slate-800 rounded-xl p-3 w-full text-center leading-relaxed">
+            "{target.bio || '반갑습니다! 파티 즐겁게 대화 나누어 보아요 :)'}"
           </p>
-        </div>
-
-        {/* 연애 취향 카테고리 태그 */}
-        <div className="space-y-2 mb-4 bg-slate-900/40 border border-slate-800 rounded-2xl p-3">
-          <h4 className="text-[11px] font-semibold text-amber-400 tracking-wide uppercase flex items-center gap-1">
-            <Sparkles size={12} /> 연애 취향 & 데이트 스타일
-          </h4>
-
-          <div className="grid grid-cols-1 gap-1.5 text-xs text-slate-300">
-            <div className="flex justify-between items-center bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 text-[11px]">원하는 연애 분위기</span>
-              <span className="font-medium text-amber-300">{target.loveStyle?.relationshipType || '미설정'}</span>
-            </div>
-            <div className="flex justify-between items-center bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 text-[11px]">첫 만남 데이트</span>
-              <span className="font-medium text-pink-300">{target.loveStyle?.dateStyle || '미설정'}</span>
-            </div>
-            <div className="flex justify-between items-center bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-800">
-              <span className="text-slate-400 text-[11px]">주말 여가 스타일</span>
-              <span className="font-medium text-purple-300">{target.loveStyle?.weekendHobby || '미설정'}</span>
-            </div>
-          </div>
         </div>
 
         {/* 호감 보내기 (동성 금지 검증) */}
@@ -166,7 +105,7 @@ export const ParticipantCardModal: React.FC<ParticipantCardModalProps> = ({
             <div className="mb-4 bg-gradient-to-r from-pink-950/40 to-purple-950/40 border border-pink-500/30 rounded-2xl p-3 text-center">
               <p className="text-xs font-semibold text-pink-300 mb-2 flex items-center justify-center gap-1">
                 <Heart size={14} className="fill-pink-400 text-pink-400" />
-                비공개 호감 보내기
+                비공개 호감 선택
               </p>
 
               <div className="grid grid-cols-2 gap-2">
@@ -211,21 +150,21 @@ export const ParticipantCardModal: React.FC<ParticipantCardModalProps> = ({
           )
         )}
 
-        {/* 나만의 3줄 비공개 메모 (확장) */}
+        {/* 비밀 메모 */}
         {myUserId !== target.id && (
           <div className="space-y-1.5">
             <div className="flex justify-between items-center">
               <label className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-                <MessageSquare size={12} /> 나만의 비밀 메모 (3줄까지 작성 가능, 나만 봄)
+                <MessageSquare size={12} /> 나만의 비밀 메모 (나만 보기)
               </label>
               {isSaved && <span className="text-[10px] text-emerald-400 font-bold">저장됨!</span>}
             </div>
 
             <textarea
-              rows={3}
+              rows={2}
               value={noteText}
               onChange={(e) => setNoteText(e.target.value)}
-              placeholder="예: 첫인상이 상냥해 보이셨음 (1차)&#10;대화 시 와인/영화 취향 일치 (2차)&#10;진솔한 느낌이 제일 좋았음 (3차)"
+              placeholder="상대에 대해 기억할 메모를 자유롭게 적어보세요..."
               className="w-full p-2.5 text-xs rounded-xl bg-slate-900/90 border border-slate-800 text-white focus:outline-none focus:border-amber-400 leading-relaxed placeholder-slate-600"
             />
             <button
@@ -240,3 +179,4 @@ export const ParticipantCardModal: React.FC<ParticipantCardModalProps> = ({
     </div>
   );
 };
+

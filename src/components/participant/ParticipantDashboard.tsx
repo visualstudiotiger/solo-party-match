@@ -7,22 +7,14 @@ import { StepActionModal } from './StepActionModal';
 import {
   Heart,
   Search,
-  UserCheck,
   Sparkles,
-  Users,
-  Award,
-  LogOut,
   Bell,
-  CheckCircle2,
   Lock,
-  ChevronRight,
-  Filter,
   Hourglass,
-  Flame,
-  TrendingUp,
-  History,
   MousePointerClick,
   Crown,
+  Eye,
+  GlassWater,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -57,42 +49,26 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
   const [genderFilter, setGenderFilter] = useState<'ALL' | 'M' | 'F'>('ALL');
   const [tableFilter, setTableFilter] = useState<number | 'ALL'>('ALL');
 
-  // Interactive Heart Journey Round Filter (1: 첫인상, 2: 2차, 3: 최종, 'ALL': 전체)
-  const [selectedJourneyRound, setSelectedJourneyRound] = useState<1 | 2 | 3 | 'ALL'>(1);
+  // Heart Journey Round Filter (1: 첫인상, 2: 최종 선택, 'ALL': 전체)
+  const [selectedJourneyRound, setSelectedJourneyRound] = useState<1 | 2 | 'ALL'>(1);
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [profileFormMode, setProfileFormMode] = useState<'CREATE' | 'EDIT'>('CREATE');
   const [selectedTarget, setSelectedTarget] = useState<Participant | null>(null);
   
-  // Interactive Step Modal Auto-popup State
+  // Step Modal Auto-popup State
   const [isStepModalOpen, setIsStepModalOpen] = useState(false);
   const [lastStep, setLastStep] = useState(currentStep);
 
-  // Progressive Unmasking State
   const isWaitingStep = currentStep === 'WAITING';
-  const isListVisible = true;
 
-  const isBasicInfoUnlocked =
-    currentStep === 'FIRST_INTRO' ||
-    currentStep === 'FIRST_IMPRESSION' ||
-    currentStep === 'ROTATION' ||
-    currentStep === 'ROUND2_SELECT' ||
-    currentStep === 'FINAL_SELECT' ||
-    currentStep === 'RESULT_ANNOUNCE';
-
-  const isChildrenInfoUnlocked =
-    currentStep === 'FINAL_SELECT' || currentStep === 'RESULT_ANNOUNCE';
-
-  // Automatically pop up step action modal whenever host changes step
   useEffect(() => {
     if (currentStep !== lastStep) {
       setLastStep(currentStep);
 
       if (
-        currentStep === 'FIRST_INTRO' ||
         currentStep === 'FIRST_IMPRESSION' ||
-        currentStep === 'ROTATION' ||
-        currentStep === 'ROUND2_SELECT' ||
+        currentStep === 'PARTY_IN_PROGRESS' ||
         currentStep === 'FINAL_SELECT'
       ) {
         setIsStepModalOpen(true);
@@ -109,7 +85,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
     }
   }, [currentStep, lastStep]);
 
-  // Confetti trigger when results are revealed
   useEffect(() => {
     if (isResultsRevealed && activeTab === 'MATCHES') {
       confetti({
@@ -121,11 +96,9 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
   }, [isResultsRevealed, activeTab]);
 
   const isSelectionStep =
-    currentStep === 'FIRST_IMPRESSION' ||
-    currentStep === 'ROUND2_SELECT' ||
-    currentStep === 'FINAL_SELECT';
+    currentStep === 'FIRST_IMPRESSION' || currentStep === 'FINAL_SELECT';
 
-  // Current user's sent selections
+  // Sent selections
   const mySentSelections = selections.filter((s) => s.fromId === activeUser?.id);
   
   // Received count
@@ -136,10 +109,8 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
     (m) => m.user1Id === activeUser?.id || m.user2Id === activeUser?.id
   );
 
-  // Heart Journey Timeline per round
   const round1Selections = mySentSelections.filter((s) => s.round === 1);
   const round2Selections = mySentSelections.filter((s) => s.round === 2);
-  const round3Selections = mySentSelections.filter((s) => s.round === 3);
 
   // Filtered participant list for ALL tab
   const filteredParticipants = participants.filter((p) => {
@@ -147,8 +118,8 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
 
     if (searchQuery.trim()) {
       const matchNickname = p.nickname.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchJob = p.job.toLowerCase().includes(searchQuery.toLowerCase());
-      if (!matchNickname && !matchJob) return false;
+      const matchBio = (p.bio || '').toLowerCase().includes(searchQuery.toLowerCase());
+      if (!matchNickname && !matchBio) return false;
     }
 
     if (genderFilter !== 'ALL' && p.gender !== genderFilter) return false;
@@ -157,7 +128,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
     return true;
   });
 
-  // Filtered list specifically for SENT tab based on selected Journey Round
   const activeJourneySelections = selectedJourneyRound === 'ALL'
     ? mySentSelections
     : mySentSelections.filter((s) => s.round === selectedJourneyRound);
@@ -170,25 +140,19 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
   const getStepTitle = () => {
     switch (currentStep) {
       case 'WAITING':
-        return '1단계: 파티 대기 (참가자 입장 중)';
-      case 'FIRST_INTRO':
-        return '2단계: 1차 자기소개 (프로필 확인)';
+        return '1단계: 파티 입장 대기 (프로필 설정 중)';
       case 'FIRST_IMPRESSION':
-        return '3단계: 1차 호감선택 (비공개 1, 2지망)';
-      case 'ROTATION':
-        return '4단계: 로테이션 & 자리배치 (테이블 이동)';
-      case 'ROUND2_SELECT':
-        return '5단계: 2차 호감선택 (호감 변화 기록)';
+        return '2단계: 첫인상 비공개 투표 (1, 2지망)';
+      case 'PARTY_IN_PROGRESS':
+        return '3단계: 파티 진행 & 대화시간 (스마트폰 내려놓기 🥂)';
       case 'FINAL_SELECT':
-        return '6단계: 최종 지망선택 (최종 지망 입력)';
+        return '4단계: 최종 지망 선택 (최종 1, 2지망)';
       case 'RESULT_ANNOUNCE':
-        return '7단계: 최종 매칭 결과 발표!';
+        return '5단계: 최종 매칭 결과 발표! 🎉';
       default:
         return '파티 진행 중';
     }
   };
-
-  const [showDevSwitcher, setShowDevSwitcher] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0d0814] text-slate-100 flex flex-col items-center pb-20 select-none">
@@ -207,11 +171,22 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
           </div>
 
           <div className="flex items-center gap-2">
-            {activeUser ? (
-              <span className="text-xs text-amber-300 font-bold bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-lg">
-                🟢 {activeUser.nickname} (T{activeUser.tableNo})
-              </span>
-            ) : (
+            {participants.length > 0 && (
+              <select
+                value={currentUserId || ''}
+                onChange={(e) => setCurrentUserId(e.target.value)}
+                className="bg-slate-900 border border-amber-500/40 text-amber-300 text-xs font-bold rounded-lg px-2 py-1 outline-none cursor-pointer hover:border-amber-400 transition max-w-[150px] truncate shadow"
+                title="테스트용 참가자 계정 변경"
+              >
+                {participants.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.gender === 'M' ? '♂️' : '♀️'} {p.nickname} (T{p.tableNo})
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {!activeUser && (
               <button
                 onClick={() => {
                   setProfileFormMode('CREATE');
@@ -231,13 +206,13 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
             <div className="flex items-center justify-between mb-3">
               <div>
                 <h1 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                  {activeUser.nickname}님의 프로필
+                  {activeUser.nickname}님
                   <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300">
-                    {partyCode}
+                    테이블 {activeUser.tableNo}
                   </span>
                 </h1>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  {activeUser.gender === 'M' ? '남성' : '여성'} • {activeUser.age}세 • {activeUser.job} ({activeUser.maritalStatus || '미혼'}) • T{activeUser.tableNo}
+                <p className="text-xs text-slate-300 mt-0.5 italic">
+                  "{activeUser.bio || '대화 나누고 싶어요 🥂'}"
                 </p>
               </div>
 
@@ -256,9 +231,9 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-pink-500 shadow-xl text-white">
                 <Sparkles size={24} />
               </div>
-              <h2 className="text-base font-black text-white">🎉 솔로파티 입장을 환영합니다!</h2>
+              <h2 className="text-base font-black text-white">🎉 블라인드 솔로파티 입장을 환영합니다!</h2>
               <p className="text-xs text-slate-300 max-w-xs mx-auto leading-relaxed">
-                아직 등록된 프로필이 없습니다. 아래 버튼을 눌러 프로필을 입력하고 파티에 입장해 주세요.
+                닉네임과 한 줄 소개를 등록하면 파티에 입장하실 수 있습니다.
               </p>
               <button
                 onClick={() => {
@@ -267,12 +242,12 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                 }}
                 className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-pink-500 text-white font-extrabold text-xs shadow-xl hover:brightness-110 transition flex items-center justify-center gap-2 mx-auto"
               >
-                <MousePointerClick size={14} /> 닉네임 & 프로필 입력하고 파티 입장하기
+                <MousePointerClick size={14} /> 프로필 입력하고 입장하기
               </button>
             </div>
           )}
 
-          {/* Real-time Party Step Status Banner & Manual Open Button */}
+          {/* Real-time Party Step Status Banner */}
           <div
             onClick={() => setIsStepModalOpen(true)}
             className="flex items-center justify-between bg-gradient-to-r from-pink-950/40 via-purple-950/40 to-amber-950/40 border border-pink-500/30 rounded-2xl px-3.5 py-2.5 cursor-pointer hover:border-pink-400 transition"
@@ -283,77 +258,73 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
             </div>
             {isSelectionStep && (
               <span className="text-[10px] text-amber-300 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-400/40">
-                입력 창 열기 →
+                투표하기 →
               </span>
             )}
           </div>
 
-          {/* Filter Tabs (Visible when list is unlocked) */}
-          {isListVisible && (
-            <div className="grid grid-cols-4 gap-2 mt-4">
-              <button
-                onClick={() => setActiveTab('ALL')}
-                className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
-                  activeTab === 'ALL'
-                    ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
-                    : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-              >
-                <span>전체</span>
-                <span className="text-[9px] opacity-80">{filteredParticipants.length}명</span>
-              </button>
+          {/* Filter Tabs */}
+          <div className="grid grid-cols-4 gap-2 mt-4">
+            <button
+              onClick={() => setActiveTab('ALL')}
+              className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
+                activeTab === 'ALL'
+                  ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
+                  : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <span>전체</span>
+              <span className="text-[9px] opacity-80">{filteredParticipants.length}명</span>
+            </button>
 
-              <button
-                onClick={() => setActiveTab('SENT')}
-                className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
-                  activeTab === 'SENT'
-                    ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
-                    : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-              >
-                <span>💖 내 호감</span>
-                <span className="text-[9px] opacity-80">{mySentSelections.length}명</span>
-              </button>
+            <button
+              onClick={() => setActiveTab('SENT')}
+              className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
+                activeTab === 'SENT'
+                  ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
+                  : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <span>💖 내 호감</span>
+              <span className="text-[9px] opacity-80">{mySentSelections.length}명</span>
+            </button>
 
-              <button
-                onClick={() => setActiveTab('RECEIVED')}
-                className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
-                  activeTab === 'RECEIVED'
-                    ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
-                    : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-              >
-                <span>🔔 받은 호감</span>
-                <span className="text-[9px] opacity-80">{receivedCount}</span>
-              </button>
+            <button
+              onClick={() => setActiveTab('RECEIVED')}
+              className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
+                activeTab === 'RECEIVED'
+                  ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
+                  : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <span>🔔 받은 호감</span>
+              <span className="text-[9px] opacity-80">{receivedCount}</span>
+            </button>
 
-              <button
-                onClick={() => setActiveTab('MATCHES')}
-                className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
-                  activeTab === 'MATCHES'
-                    ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
-                    : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
-                }`}
-              >
-                <span>💘 매칭결과</span>
-                <span className="text-[9px] opacity-80">{mutualMatches.length}</span>
-              </button>
-            </div>
-          )}
+            <button
+              onClick={() => setActiveTab('MATCHES')}
+              className={`py-2 rounded-xl text-xs font-bold transition flex flex-col items-center justify-center gap-0.5 ${
+                activeTab === 'MATCHES'
+                  ? 'bg-gradient-to-r from-amber-500 to-pink-500 text-white shadow-lg shadow-pink-500/20'
+                  : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <span>💘 매칭결과</span>
+              <span className="text-[9px] opacity-80">{mutualMatches.length}</span>
+            </button>
+          </div>
         </div>
 
         {/* Content Display */}
         <div className="p-4 space-y-3 flex-1">
           
-          {/* Rule 3: Step 1 WAITING View */}
           {activeTab === 'SENT' ? (
-            /* TAB 2: SENT HEARTS + INTERACTIVE HEART JOURNEY TIMELINE */
+            /* TAB 2: SENT HEARTS JOURNEY */
             <div className="space-y-4">
-              {/* Interactive Heart Journey Timeline Filter Bar */}
               <div className="glass-card rounded-2xl p-4 border border-amber-500/30 space-y-3">
                 <div className="flex justify-between items-center">
                   <h3 className="text-xs font-bold text-amber-300 tracking-wide uppercase flex items-center gap-1.5">
-                    <TrendingUp size={14} /> 나의 호감 변화 추이 (클릭 시 해당 참가자 하단 노출)
+                    <Sparkles size={14} /> 단계별 내 호감 투표 기록
                   </h3>
                   <button
                     onClick={() => setSelectedJourneyRound('ALL')}
@@ -367,8 +338,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                   </button>
                 </div>
 
-                {/* 3 Clickable Round Cards */}
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="grid grid-cols-2 gap-2 text-center text-xs">
                   {/* Round 1 Card */}
                   <button
                     type="button"
@@ -380,7 +350,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                     }`}
                   >
                     <span className="text-[10px] text-pink-300 block font-extrabold flex items-center justify-between mb-1">
-                      1차 첫인상
+                      1차 첫인상 선택
                       {selectedJourneyRound === 1 && <MousePointerClick size={12} className="text-pink-400" />}
                     </span>
                     {round1Selections.length === 0 ? (
@@ -403,13 +373,13 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                     onClick={() => setSelectedJourneyRound(2)}
                     className={`p-2.5 rounded-xl border text-left transition relative ${
                       selectedJourneyRound === 2
-                        ? 'bg-gradient-to-b from-purple-950/60 to-slate-900 border-purple-400 shadow-lg ring-2 ring-purple-400/50'
+                        ? 'bg-gradient-to-b from-amber-950/60 to-slate-900 border-amber-400 shadow-lg ring-2 ring-amber-400/50'
                         : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
                     }`}
                   >
-                    <span className="text-[10px] text-purple-300 block font-extrabold flex items-center justify-between mb-1">
-                      2차 대화후
-                      {selectedJourneyRound === 2 && <MousePointerClick size={12} className="text-purple-400" />}
+                    <span className="text-[10px] text-amber-300 block font-extrabold flex items-center justify-between mb-1">
+                      2차 최종 지망 선택
+                      {selectedJourneyRound === 2 && <MousePointerClick size={12} className="text-amber-400" />}
                     </span>
                     {round2Selections.length === 0 ? (
                       <span className="text-[11px] text-slate-600 block">미선택</span>
@@ -424,59 +394,9 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                       })
                     )}
                   </button>
-
-                  {/* Round 3 Card */}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedJourneyRound(3)}
-                    className={`p-2.5 rounded-xl border text-left transition relative ${
-                      selectedJourneyRound === 3
-                        ? 'bg-gradient-to-b from-amber-950/60 to-slate-900 border-amber-400 shadow-lg ring-2 ring-amber-400/50'
-                        : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
-                    }`}
-                  >
-                    <span className="text-[10px] text-amber-300 block font-extrabold flex items-center justify-between mb-1">
-                      3차 최종지망
-                      {selectedJourneyRound === 3 && <MousePointerClick size={12} className="text-amber-400" />}
-                    </span>
-                    {round3Selections.length === 0 ? (
-                      <span className="text-[11px] text-slate-600 block">미선택</span>
-                    ) : (
-                      round3Selections.map((s) => {
-                        const target = participants.find((p) => p.id === s.toId);
-                        return (
-                          <div key={s.toId} className="text-[11px] font-bold text-white truncate">
-                            {s.rank}순위: {target?.nickname}
-                          </div>
-                        );
-                      })
-                    )}
-                  </button>
                 </div>
               </div>
 
-              {/* Header Label for Currently Filtered Round List */}
-              <div className="flex items-center justify-between text-xs px-1">
-                <span className="font-bold text-amber-300 flex items-center gap-1.5">
-                  <Sparkles size={14} />
-                  {selectedJourneyRound === 'ALL'
-                    ? '전체 호감 표현 상대 목록'
-                    : selectedJourneyRound === 1
-                    ? '📍 1차 첫인상 단계에서 선택한 상대'
-                    : selectedJourneyRound === 2
-                    ? '📍 2차 대화 후 선택한 상대'
-                    : '📍 3차 최종 지망에서 선택한 상대'}
-                  ({journeyParticipants.length}명)
-                </span>
-
-                {selectedJourneyRound !== 'ALL' && (
-                  <span className="text-[10px] text-slate-400">
-                    상단 카드 선택으로 변경 가능
-                  </span>
-                )}
-              </div>
-
-              {/* Filtered Participant Cards based on selected journey round */}
               {journeyParticipants.length === 0 ? (
                 <div className="glass-card rounded-2xl p-6 text-center text-xs text-slate-400">
                   선택한 단계에 호감 표기한 참가자가 없습니다.
@@ -484,7 +404,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
               ) : (
                 <div className="grid grid-cols-2 gap-3">
                   {journeyParticipants.map((p) => {
-                    // Find the selection record for this participant in the currently selected round (or latest)
                     const roundSelection = selectedJourneyRound === 'ALL'
                       ? mySentSelections.find((s) => s.toId === p.id)
                       : mySentSelections.find((s) => s.toId === p.id && s.round === selectedJourneyRound);
@@ -503,7 +422,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                               roundSelection.rank === 1 ? 'bg-pink-600' : 'bg-purple-600'
                             }`}
                           >
-                            {selectedJourneyRound !== 'ALL' ? `${selectedJourneyRound}차 ` : ''}
                             {roundSelection.rank}순위 💖
                           </span>
                         )}
@@ -516,10 +434,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                           />
                           <div className="overflow-hidden">
                             <h4 className="text-sm font-bold text-white truncate">{p.nickname}</h4>
-                            <p className="text-[11px] text-amber-300/90 font-medium truncate">
-                              {p.job} ({p.maritalStatus})
-                            </p>
-                            <span className="inline-block text-[10px] text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800 mt-0.5">
+                            <span className="inline-block text-[10px] text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 mt-1">
                               T{p.tableNo}
                             </span>
                           </div>
@@ -556,7 +471,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                 현재 <span className="text-pink-400 font-bold">{receivedCount}명</span>의 이성 참가자가 회원님께 관심 호감을 표현했습니다!
               </p>
               <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-[11px] text-slate-300">
-                🔒 신솔파티의 '마음은 숨기고' 원칙에 따라, 상대방의 구체적인 신원은 서로 선택을 완료한 후 발표 시 공개됩니다.
+                🔒 신솔파티의 '마음은 숨기고' 원칙에 따라, 상대방의 구체적인 신원은 서로 지목을 완료한 후 매칭 발표 시 공개됩니다.
               </div>
             </div>
           ) : activeTab === 'MATCHES' ? (
@@ -625,9 +540,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                                 {isRank1Match ? '🔥 1순위 상호 매칭' : '💖 2순위 매칭'}
                               </span>
                             </div>
-                            <p className="text-xs text-slate-300">
-                              {partner.realName || partner.nickname} • {partner.job} ({partner.maritalStatus})
-                            </p>
                             <p className="text-xs text-amber-300 font-mono mt-1 font-bold">
                               📞 연락처: {partner.phone || '010-XXXX-XXXX'}
                             </p>
@@ -651,17 +563,23 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                     <div>
                       <h4 className="font-extrabold text-amber-300">1단계: 파티 입장 대기 중</h4>
                       <p className="text-[11px] text-slate-300">
-                        현재 총 <strong className="text-white font-bold">{participants.length}명</strong>(남 {participants.filter(p => p.gender === 'M').length}명 / 여 {participants.filter(p => p.gender === 'F').length}명) 입장 완료. 사회자가 진행할 때까지 프로필을 둘러보세요.
+                        현재 총 <strong className="text-white font-bold">{participants.length}명</strong>(남 {participants.filter(p => p.gender === 'M').length}명 / 여 {participants.filter(p => p.gender === 'F').length}명) 입장 완료.
                       </p>
                     </div>
                   </div>
                 </div>
-              ) : (
-                /* Notice Card */
-                <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-3 text-xs text-amber-200/90 leading-relaxed flex items-start gap-2">
-                  <span className="text-amber-400 text-sm">💡</span>
+              ) : currentStep === 'PARTY_IN_PROGRESS' ? (
+                <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-3 text-xs text-amber-200/90 leading-relaxed flex items-start gap-2 mb-2">
+                  <GlassWater size={18} className="text-amber-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-amber-300">단계별 해금 규칙:</strong> 2단계 자기소개 시 기본 프로필 해금, 6단계 최종 선택 전 자녀유무 해금! (연락처는 최종 발표 시에만 공개)
+                    <strong className="text-amber-300">오프라인 대화 시간:</strong> 스마트폰을 내려놓고 대화와 파티에 몰입해 보세요!
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-3 text-xs text-amber-200/90 leading-relaxed flex items-start gap-2 mb-2">
+                  <Eye size={18} className="text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-amber-300">블라인드 파티:</strong> 닉네임과 한 줄 소개를 보고 편안하게 인사를 나누어 보세요!
                   </div>
                 </div>
               )}
@@ -679,7 +597,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                   />
                 </div>
 
-                {/* Sub Filters (Gender & Table) */}
+                {/* Sub Filters (Gender & Dynamic Table Filter) */}
                 <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
                   <div className="flex items-center gap-1">
                     <span className="text-[11px] text-slate-500">성별:</span>
@@ -721,9 +639,9 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
               {/* Participant Card Grid List */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 {filteredParticipants.map((p) => {
-                  const isSameGender = p.gender === activeUser.gender;
+                  const isSameGender = p.gender === activeUser?.gender;
                   const selection = mySentSelections.find((s) => s.toId === p.id);
-                  const userNote = notes[activeUser.id]?.[p.id];
+                  const userNote = notes[activeUser?.id || '']?.[p.id];
 
                   return (
                     <div
@@ -731,7 +649,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                       onClick={() => setSelectedTarget(p)}
                       className="glass-card rounded-2xl p-3 border border-slate-800/80 hover:border-pink-500/50 transition cursor-pointer relative group flex flex-col justify-between"
                     >
-                      {/* Selection rank badge or Same gender badge */}
                       {selection ? (
                         <span
                           className={`absolute top-2 right-2 px-2 py-0.5 text-[9px] font-bold rounded-full text-white shadow ${
@@ -757,23 +674,6 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                             {p.nickname}
                           </h4>
                           
-                          {/* Unmasking Info Display */}
-                          <div className="text-[11px] text-slate-400 truncate space-y-0.5">
-                            {isBasicInfoUnlocked ? (
-                              <p className="text-amber-300/90 font-medium truncate">
-                                {p.job} ({p.maritalStatus || '미혼'})
-                              </p>
-                            ) : (
-                              <p className="text-pink-300/80">🔒 1차 자기소개 전 비공개</p>
-                            )}
-
-                            {isChildrenInfoUnlocked && (
-                              <p className="text-purple-300 text-[10px] font-semibold truncate">
-                                👶 {p.hasChildren || '자녀 없음'}
-                              </p>
-                            )}
-                          </div>
-
                           <span className="inline-block text-[10px] text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 mt-1">
                             테이블 {p.tableNo}
                           </span>
@@ -782,12 +682,12 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
 
                       {/* Bio snippet */}
                       <p className="text-[11px] text-slate-300 line-clamp-2 italic bg-slate-950/40 p-1.5 rounded-lg border border-slate-800/50 mb-2">
-                        "{p.bio}"
+                        "{p.bio || '반갑습니다!'}"
                       </p>
 
-                      {/* Private Memo (up to 3 lines) */}
+                      {/* Private Memo */}
                       {userNote && (
-                        <div className="text-[10px] text-amber-300 font-medium line-clamp-3 bg-amber-950/30 p-1.5 rounded border border-amber-500/20 mb-2 whitespace-pre-line leading-tight">
+                        <div className="text-[10px] text-amber-300 font-medium line-clamp-2 bg-amber-950/30 p-1.5 rounded border border-amber-500/20 mb-2 whitespace-pre-line leading-tight">
                           📝 {userNote}
                         </div>
                       )}
@@ -807,11 +707,11 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                         }`}
                       >
                         {isSameGender ? (
-                          '프로필 & 비밀 메모'
+                          '프로필 & 메모'
                         ) : (
                           <>
                             <Heart size={12} className={selection ? 'fill-white' : ''} />
-                            {selection ? `${selection.rank}순위 호감 중` : '프로필 & 호감'}
+                            {selection ? `${selection.rank}순위 선택중` : '프로필 & 호감'}
                           </>
                         )}
                       </button>
@@ -850,10 +750,10 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
           currentStep={currentStep}
           currentSelections={activeJourneySelections}
           onSelectHeart={(targetId, rank) => {
-            if (activeUser) submitSelection(activeUser.id, targetId, rank, 1);
+            if (activeUser) submitSelection(activeUser.id, targetId, rank);
           }}
           onRemoveHeart={(targetId) => {
-            if (activeUser) removeSelection(activeUser.id, targetId, 1);
+            if (activeUser) removeSelection(activeUser.id, targetId, currentStep === 'FINAL_SELECT' ? 2 : 1);
           }}
           savedNote={selectedTarget && activeUser ? notes[activeUser.id]?.[selectedTarget.id] || '' : ''}
           onSaveNote={(targetId, note) => {
@@ -863,7 +763,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
         />
 
         {/* Interactive Step Auto-Popup Modal */}
-        {isStepModalOpen && (
+        {isStepModalOpen && activeUser && (
           <StepActionModal
             currentStep={currentStep}
             activeUser={activeUser}
@@ -871,12 +771,12 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
             selections={selections}
             onSubmitSelection={(toId, rank) => {
               if (activeUser) {
-                submitSelection(activeUser.id, toId, rank, currentStep === 'FINAL_SELECT' ? 3 : currentStep === 'ROUND2_SELECT' ? 2 : 1);
+                submitSelection(activeUser.id, toId, rank, currentStep === 'FINAL_SELECT' ? 2 : 1);
               }
             }}
             onRemoveSelection={(toId) => {
               if (activeUser) {
-                removeSelection(activeUser.id, toId, currentStep === 'FINAL_SELECT' ? 3 : currentStep === 'ROUND2_SELECT' ? 2 : 1);
+                removeSelection(activeUser.id, toId, currentStep === 'FINAL_SELECT' ? 2 : 1);
               }
             }}
             isResultsRevealed={isResultsRevealed}
@@ -903,3 +803,4 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
     </div>
   );
 };
+

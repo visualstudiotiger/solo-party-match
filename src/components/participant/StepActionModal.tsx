@@ -1,6 +1,6 @@
 import React from 'react';
 import { PartyStep, Participant, Selection } from '../../types/party';
-import { Heart, Sparkles, RotateCcw, X, Eye, Lock, Award, Users, AlertCircle } from 'lucide-react';
+import { Heart, X, MessageCircle, GlassWater } from 'lucide-react';
 
 interface StepActionModalProps {
   currentStep: PartyStep;
@@ -20,7 +20,6 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
   selections,
   onSubmitSelection,
   onRemoveSelection,
-  isResultsRevealed,
   onClose,
 }) => {
   // Opposite gender candidates
@@ -29,13 +28,10 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
   );
 
   const isFirstImpression = currentStep === 'FIRST_IMPRESSION';
-  const isSelectionStep =
-    isFirstImpression ||
-    currentStep === 'ROUND2_SELECT' ||
-    currentStep === 'FINAL_SELECT';
+  const isFinalSelect = currentStep === 'FINAL_SELECT';
+  const isSelectionStep = isFirstImpression || isFinalSelect;
 
-  const currentRound =
-    currentStep === 'FINAL_SELECT' ? 3 : currentStep === 'ROUND2_SELECT' ? 2 : 1;
+  const currentRound: 1 | 2 = isFinalSelect ? 2 : 1;
 
   const mySelections = selections.filter(
     (s) => s.fromId === activeUser.id && s.round === currentRound
@@ -52,7 +48,7 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
 
   const handleFinishSelection = () => {
     if (isFirstImpression && !isComplete) {
-      alert('첫인상 1차 선택에서는 1순위와 2순위를 모두 선택하셔야 완료할 수 있습니다!');
+      alert('첫인상 투표에서는 1순위와 2순위를 모두 선택하셔야 제출할 수 있습니다!');
       return;
     }
     onClose();
@@ -62,7 +58,6 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
         <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto glass-panel rounded-3xl border border-pink-500/30 shadow-2xl p-5 text-slate-100">
-          {/* Allow close button only if not mandatory or selection complete */}
           {(!isFirstImpression || isComplete) && (
             <button
               onClick={onClose}
@@ -76,34 +71,32 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
           <div className="text-center mb-4">
             <span className="inline-block px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/40 text-pink-300 text-xs font-extrabold uppercase tracking-wider mb-2">
               {isFirstImpression
-                ? '👀 1차 첫인상 선택 (필수 선택단계)'
-                : currentStep === 'FINAL_SELECT'
-                ? '💌 최종 3차 매칭 지망 입력'
-                : '💖 2차 비공개 호감 선택'}
+                ? '👀 첫인상 호감 투표'
+                : '💌 최종 매칭 지망 선택'}
             </span>
             <h2 className="text-xl font-extrabold text-white">
-              {isFirstImpression ? '첫인상 1순위, 2순위를 선택해 주세요!' : '마음에 드는 이성을 선택해 주세요!'}
+              {isFirstImpression
+                ? '첫인상이 좋은 이성 2명을 선택해 주세요!'
+                : '최종 1순위, 2순위 지망을 선택해 주세요!'}
             </h2>
             <p className="text-xs text-slate-300 mt-1">
-              {isFirstImpression
-                ? '⚠️ 1순위와 2순위를 모두 선택해야 제출을 완료하고 대기 화면으로 이동할 수 있습니다.'
-                : '상대방에게는 호감 선택 사실이 노출되지 않으며, 서로 선택 시에만 매칭됩니다.'}
+              상대방에게는 호감선택 사실이 노출되지 않으며, 서로 지목 시 매칭됩니다.
             </p>
           </div>
 
           {/* Selection Status Summary Box */}
           <div className="grid grid-cols-2 gap-2 mb-4 bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
             <div className="p-2 rounded-xl bg-pink-950/40 border border-pink-500/30 text-center">
-              <span className="text-[10px] text-pink-300 block font-semibold">1순위 (1지망) *필수</span>
+              <span className="text-[10px] text-pink-300 block font-semibold">1순위 (1지망)</span>
               <strong className="text-xs text-white truncate block">
-                {rank1Target ? `${rank1Target.nickname}` : '⚠️ 미선택'}
+                {rank1Target ? `${rank1Target.nickname}` : '미선택'}
               </strong>
             </div>
 
             <div className="p-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-center">
-              <span className="text-[10px] text-purple-300 block font-semibold">2순위 (2지망) *필수</span>
+              <span className="text-[10px] text-purple-300 block font-semibold">2순위 (2지망)</span>
               <strong className="text-xs text-white truncate block">
-                {rank2Target ? `${rank2Target.nickname}` : '⚠️ 미선택'}
+                {rank2Target ? `${rank2Target.nickname}` : '미선택'}
               </strong>
             </div>
           </div>
@@ -136,13 +129,12 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
                       <div>
                         <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
                           {c.nickname}
+                          <span className="text-[10px] text-amber-400 font-normal">
+                            T{c.tableNo}
+                          </span>
                         </h4>
-                        <p className="text-[11px] text-slate-400">
-                          {isFirstImpression ? (
-                            <span className="text-pink-300/80 font-medium">🔒 1차 자기소개 전 비공개</span>
-                          ) : (
-                            `${c.job} • ${c.age}세 • ${c.maritalStatus}`
-                          )}
+                        <p className="text-[11px] text-slate-400 line-clamp-1">
+                          "{c.bio || '반갑습니다!'}"
                         </p>
                       </div>
                     </div>
@@ -196,28 +188,28 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
           >
             {isFirstImpression && !isComplete
               ? '⚠️ 1순위와 2순위를 모두 선택해 주세요'
-              : '선택 완료 제출하고 대기 화면으로 이동'}
+              : '선택 완료 및 대기 화면으로 이동'}
           </button>
         </div>
       </div>
     );
   }
 
-  if (currentStep === 'ROTATION') {
+  if (currentStep === 'PARTY_IN_PROGRESS') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
         <div className="relative w-full max-w-sm glass-panel rounded-3xl border border-amber-500/30 shadow-2xl p-6 text-center text-slate-100">
           <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-3 border border-amber-500/40">
-            <RotateCcw size={32} />
+            <GlassWater size={32} />
           </div>
 
-          <h3 className="text-xl font-extrabold text-white mb-1">🔄 로테이션 & 자리배치 안내</h3>
-          <p className="text-xs text-slate-300 mb-4">
-            사회자의 안내에 따라 지정된 새로운 테이블로 이동해 주세요! 새로운 참가자분들과 인사를 나눠보세요.
+          <h3 className="text-xl font-extrabold text-white mb-1">🥂 오프라인 파티 대화 시간</h3>
+          <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+            스마트폰을 내려놓으시고 같은 테이블 분들과 자연스럽게 대화와 게임을 즐겨보세요! 사회자 안내에 따라 테이블 로테이션이 진행됩니다.
           </p>
 
           <div className="bg-slate-900/90 border border-amber-400/40 rounded-2xl p-4 mb-4">
-            <span className="text-xs text-slate-400 block mb-1">회원님의 배치 테이블</span>
+            <span className="text-xs text-slate-400 block mb-1">현재 나의 테이블</span>
             <strong className="text-2xl font-extrabold text-amber-300">
               테이블 {activeUser.tableNo} 번
             </strong>
@@ -227,31 +219,7 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
             onClick={onClose}
             className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-amber-300 border border-slate-700"
           >
-            이동 확인 완료
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (currentStep === 'FIRST_INTRO') {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-        <div className="relative w-full max-w-sm glass-panel rounded-3xl border border-purple-500/30 shadow-2xl p-6 text-center text-slate-100">
-          <div className="w-16 h-16 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center mx-auto mb-3 border border-purple-500/40">
-            <Users size={32} />
-          </div>
-
-          <h3 className="text-xl font-extrabold text-white mb-1">👋 1차 자기소개 시간</h3>
-          <p className="text-xs text-slate-300 mb-4">
-            참가자분들과 서로 인사하며 자기소개를 시작해 보세요! 상대방의 프로필 카드를 터치하여 한 줄 소개와 취향을 확인할 수 있습니다.
-          </p>
-
-          <button
-            onClick={onClose}
-            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-extrabold shadow-lg hover:brightness-110"
-          >
-            참가자 리스트 확인하기
+            확인 및 목록 보기
           </button>
         </div>
       </div>
@@ -260,3 +228,4 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
 
   return null;
 };
+
