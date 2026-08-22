@@ -92,6 +92,15 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
     alert('남성 참가자들의 테이블 배치가 다음 번호로 로테이션되었습니다! 🔄');
   };
 
+  // Female Rotation logic: Shift females to next table (1->2, 2->3... max->1)
+  const handleFemaleRotateTables = () => {
+    femaleList.forEach((f) => {
+      const nextTable = f.tableNo >= totalTables ? 1 : f.tableNo + 1;
+      updateTableAssignment(f.id, nextTable, f.seatNo);
+    });
+    alert('여성 참가자들의 테이블 배치가 다음 번호로 로테이션되었습니다! 🔄');
+  };
+
   // Smart Seating Recommendation
   const handleSmartSeatingByFirstImpression = () => {
     alert(`✨ 첫인상 선택 호감도를 분석하여 호감이 연결된 남녀를 1~${totalTables}번 테이블에 우선 배치했습니다!`);
@@ -612,9 +621,16 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
 
                 <button
                   onClick={handleAutoRotateTables}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 text-xs font-bold hover:bg-slate-700 flex items-center gap-1.5"
+                  className="px-3.5 py-2.5 rounded-xl bg-blue-950/80 text-blue-200 border border-blue-500/40 text-xs font-bold hover:bg-blue-900 flex items-center gap-1.5 shadow"
                 >
-                  <RotateCcw size={15} /> 남성 순차 로테이션
+                  <RotateCcw size={15} /> ♂️ 남성 순차 로테이션
+                </button>
+
+                <button
+                  onClick={handleFemaleRotateTables}
+                  className="px-3.5 py-2.5 rounded-xl bg-pink-950/80 text-pink-200 border border-pink-500/40 text-xs font-bold hover:bg-pink-900 flex items-center gap-1.5 shadow"
+                >
+                  <RotateCcw size={15} /> ♀️ 여성 순차 로테이션
                 </button>
               </div>
             </div>
