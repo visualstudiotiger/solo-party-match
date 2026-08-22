@@ -36,7 +36,7 @@ interface PartyStoreState extends PartyState {
   getReceivedCount: (userId: string) => number;
 }
 
-const STORAGE_KEY = 'soloparty_state_v1';
+const STORAGE_KEY = 'soloparty_state_v2';
 const CHANNEL_NAME = 'soloparty_broadcast_channel';
 
 // Helper to generate demo 1st impression & final selections for mock data
@@ -422,14 +422,24 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
       const newId = `${genderPrefix}_${Date.now()}`;
       const defaultAvatars = isMale
         ? [
-            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
+            '/avatars/m1.jpg',
+            '/avatars/m2.jpg',
+            '/avatars/m3.jpg',
+            '/avatars/m4.jpg',
+            '/avatars/m5.jpg',
+            '/avatars/m6.jpg',
+            '/avatars/m7.jpg',
+            '/avatars/m8.jpg',
           ]
         : [
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80',
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80',
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80',
+            '/avatars/f1.jpg',
+            '/avatars/f2.jpg',
+            '/avatars/f3.jpg',
+            '/avatars/f4.jpg',
+            '/avatars/f5.jpg',
+            '/avatars/f6.jpg',
+            '/avatars/f7.jpg',
+            '/avatars/f8.jpg',
           ];
 
       const avatarUrl =

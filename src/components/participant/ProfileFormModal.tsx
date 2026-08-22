@@ -23,10 +23,10 @@ export const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
   const [gender, setGender] = useState<Gender>(participant?.gender || 'M');
   const [bio, setBio] = useState(participant?.bio || '');
   const [phone, setPhone] = useState(participant?.phone || '');
-  const [avatarUrl, setAvatarUrl] = useState(
-    participant?.avatarUrl ||
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
-  );
+  const getRandomAvatar = (g: Gender) => {
+    const randNum = Math.floor(Math.random() * 8) + 1;
+    return g === 'M' ? `/avatars/m${randNum}.jpg` : `/avatars/f${randNum}.jpg`;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +34,13 @@ export const ProfileFormModal: React.FC<ProfileFormModalProps> = ({
       alert('닉네임을 입력해 주세요.');
       return;
     }
+
+    const assignedAvatarUrl = participant?.avatarUrl || getRandomAvatar(gender);
+
     onSave({
       nickname,
       gender,
-      avatarUrl,
+      avatarUrl: assignedAvatarUrl,
       bio: bio.trim() || '반갑습니다! 대화 나누고 싶어요 🥂',
       phone,
     });

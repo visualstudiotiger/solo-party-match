@@ -12,7 +12,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '주말엔 유기견 봉사활동과 커피 로스팅을 즐깁니다 ☕',
     tableNo: 1,
     seatNo: 1,
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m1.jpg',
     phone: '010-1234-5678',
   },
   {
@@ -22,7 +22,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '음악 듣는 것과 맛집 탐방을 좋아해요. 진솔한 대화 원해요!',
     tableNo: 1,
     seatNo: 2,
-    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m2.jpg',
     phone: '010-2345-6789',
   },
   {
@@ -32,7 +32,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '테니스와 와인을 사랑합니다. 다정한 매력의 소유자!',
     tableNo: 2,
     seatNo: 1,
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m3.jpg',
     phone: '010-3456-7890',
   },
   {
@@ -42,7 +42,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '공간 디자인을 하고 정갈한 음식을 좋아합니다.',
     tableNo: 2,
     seatNo: 2,
-    avatarUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m4.jpg',
     phone: '010-4567-8901',
   },
   {
@@ -52,7 +52,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '동물 좋아하는 분 대환영! 따뜻하고 긍정적인 편입니다.',
     tableNo: 3,
     seatNo: 1,
-    avatarUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m5.jpg',
     phone: '010-5678-9012',
   },
   {
@@ -62,7 +62,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '러닝 매니아 🏃‍♂️ 주말 새벽마다 한강을 달립니다.',
     tableNo: 3,
     seatNo: 2,
-    avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m6.jpg',
     phone: '010-6789-0123',
   },
   {
@@ -72,7 +72,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '감성적인 전시회와 LP 음악 듣는 것을 좋아합니다.',
     tableNo: 4,
     seatNo: 1,
-    avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m7.jpg',
     phone: '010-7890-1234',
   },
   {
@@ -82,7 +82,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '진중하지만 위트 있는 스타일입니다. 좋은 인연 찾아요!',
     tableNo: 4,
     seatNo: 2,
-    avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/m8.jpg',
     phone: '010-8901-2345',
   },
 
@@ -94,7 +94,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '카페 투어와 미술관 관람을 좋아합니다 🎨',
     tableNo: 1,
     seatNo: 3,
-    avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f1.jpg',
     phone: '010-9876-5432',
   },
   {
@@ -104,7 +104,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '솔직하고 명쾌한 편입니다. 맛있는 와인 한 잔 함께해요!',
     tableNo: 1,
     seatNo: 4,
-    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f2.jpg',
     phone: '010-8765-4321',
   },
   {
@@ -114,7 +114,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '트렌드에 민감하지만 사람 관계는 오래 깊게 가는 스타일!',
     tableNo: 2,
     seatNo: 3,
-    avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f3.jpg',
     phone: '010-7654-3210',
   },
   {
@@ -124,7 +124,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '웃음이 많고 긍정 에너지 넘칩니다 😊',
     tableNo: 2,
     seatNo: 4,
-    avatarUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f4.jpg',
     phone: '010-6543-2109',
   },
   {
@@ -134,7 +134,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '요리와 홈베이킹이 취미예요. 잔잔한 대화 좋아합니다.',
     tableNo: 3,
     seatNo: 3,
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f5.jpg',
     phone: '010-5432-1098',
   },
   {
@@ -144,7 +144,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '필라테스와 골프를 즐깁니다. 매너 있는 분 선호해요.',
     tableNo: 3,
     seatNo: 4,
-    avatarUrl: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f6.jpg',
     phone: '010-4321-0987',
   },
   {
@@ -154,7 +154,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '꽃처럼 아름다운 순간을 만들어가는 것을 좋아해요 💐',
     tableNo: 4,
     seatNo: 3,
-    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f7.jpg',
     phone: '010-3210-9876',
   },
   {
@@ -164,7 +164,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
     bio: '에너지 넘치고 리액션이 좋은 편입니다!',
     tableNo: 4,
     seatNo: 4,
-    avatarUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: '/avatars/f8.jpg',
     phone: '010-2109-8765',
   },
 ];
