@@ -171,22 +171,11 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
           </div>
 
           <div className="flex items-center gap-2">
-            {participants.length > 0 && (
-              <select
-                value={currentUserId || ''}
-                onChange={(e) => setCurrentUserId(e.target.value)}
-                className="bg-slate-900 border border-amber-500/40 text-amber-300 text-xs font-bold rounded-lg px-2 py-1 outline-none cursor-pointer hover:border-amber-400 transition max-w-[150px] truncate shadow"
-                title="테스트용 참가자 계정 변경"
-              >
-                {participants.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.gender === 'M' ? '♂️' : '♀️'} {p.nickname} (T{p.tableNo})
-                  </option>
-                ))}
-              </select>
-            )}
-
-            {!activeUser && (
+            {activeUser ? (
+              <span className="text-xs text-amber-300 font-bold bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg">
+                🟢 {activeUser.nickname} (T{activeUser.tableNo})
+              </span>
+            ) : (
               <button
                 onClick={() => {
                   setProfileFormMode('CREATE');
