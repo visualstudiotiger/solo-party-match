@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Participant, PartyStep } from '../../types/party';
+import { getAvatarUrl } from '../../utils/image';
 import { X, Heart, MessageSquare, Lock, Eye } from 'lucide-react';
 
 interface ParticipantCardModalProps {
@@ -63,7 +64,7 @@ export const ParticipantCardModal: React.FC<ParticipantCardModalProps> = ({
         <div className="flex flex-col items-center text-center mt-2 mb-4">
           <div className="relative mb-3">
             <img
-              src={target.avatarUrl}
+              src={getAvatarUrl(target.avatarUrl)}
               alt={target.nickname}
               className="w-24 h-24 rounded-full object-cover border-2 border-amber-400 shadow-xl shadow-amber-500/10"
             />

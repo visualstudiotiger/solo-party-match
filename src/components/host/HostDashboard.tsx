@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { usePartyStore } from '../../store/partyStore';
 import { PartyStep } from '../../types/party';
+import { getAvatarUrl } from '../../utils/image';
 import { TestParticipantModal } from '../common/TestParticipantModal';
 import {
   Crown,
@@ -427,7 +428,7 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <img
-                          src={p.avatarUrl}
+                          src={getAvatarUrl(p.avatarUrl)}
                           alt={p.nickname}
                           className="w-12 h-12 rounded-full object-cover border-2 border-amber-400/60 shadow"
                         />
@@ -658,7 +659,7 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
                         >
                           <div className="flex items-center gap-2">
                             <img
-                              src={p.avatarUrl}
+                              src={getAvatarUrl(p.avatarUrl)}
                               alt={p.nickname}
                               className="w-8 h-8 rounded-full object-cover"
                             />
@@ -725,7 +726,7 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
                     >
                       <div className="flex items-center gap-3">
                         <img
-                          src={p1.avatarUrl}
+                          src={getAvatarUrl(p1.avatarUrl)}
                           alt={p1.nickname}
                           className="w-12 h-12 rounded-full object-cover border border-amber-400"
                         />
@@ -748,7 +749,7 @@ export const HostDashboard: React.FC<HostDashboardProps> = ({
                           <div className="text-xs text-amber-300 font-mono">📞 {p2.phone || '미등록'}</div>
                         </div>
                         <img
-                          src={p2.avatarUrl}
+                          src={getAvatarUrl(p2.avatarUrl)}
                           alt={p2.nickname}
                           className="w-12 h-12 rounded-full object-cover border border-pink-400"
                         />

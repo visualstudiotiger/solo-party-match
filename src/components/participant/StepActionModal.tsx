@@ -1,5 +1,6 @@
 import React from 'react';
 import { PartyStep, Participant, Selection } from '../../types/party';
+import { getAvatarUrl } from '../../utils/image';
 import { Heart, X, MessageCircle, GlassWater } from 'lucide-react';
 
 interface StepActionModalProps {
@@ -122,7 +123,7 @@ export const StepActionModal: React.FC<StepActionModalProps> = ({
                   >
                     <div className="flex items-center gap-3">
                       <img
-                        src={c.avatarUrl}
+                        src={getAvatarUrl(c.avatarUrl)}
                         alt={c.nickname}
                         className="w-11 h-11 rounded-full object-cover border border-amber-400/50"
                       />

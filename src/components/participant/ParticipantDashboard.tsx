@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePartyStore } from '../../store/partyStore';
 import { Participant, Selection } from '../../types/party';
+import { getAvatarUrl } from '../../utils/image';
 import { ProfileFormModal } from './ProfileFormModal';
 import { ParticipantCardModal } from './ParticipantCardModal';
 import { StepActionModal } from './StepActionModal';
@@ -417,7 +418,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
 
                         <div className="flex items-start gap-2.5 mb-2">
                           <img
-                            src={p.avatarUrl}
+                            src={getAvatarUrl(p.avatarUrl)}
                             alt={p.nickname}
                             className="w-12 h-12 rounded-full object-cover border border-amber-400/50"
                           />
@@ -512,7 +513,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
                       >
                         <div className="flex items-center gap-3">
                           <img
-                            src={partner.avatarUrl}
+                            src={getAvatarUrl(partner.avatarUrl)}
                             alt={partner.nickname}
                             className="w-14 h-14 rounded-full object-cover border-2 border-amber-400 shadow-md"
                           />
@@ -654,7 +655,7 @@ export const ParticipantDashboard: React.FC<ParticipantDashboardProps> = ({ onOp
 
                       <div className="flex items-start gap-2.5 mb-2">
                         <img
-                          src={p.avatarUrl}
+                          src={getAvatarUrl(p.avatarUrl)}
                           alt={p.nickname}
                           className="w-12 h-12 rounded-full object-cover border border-amber-400/50"
                         />

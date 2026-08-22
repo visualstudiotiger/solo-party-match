@@ -36,7 +36,7 @@ interface PartyStoreState extends PartyState {
   getReceivedCount: (userId: string) => number;
 }
 
-const STORAGE_KEY = 'soloparty_state_v2';
+const STORAGE_KEY = 'soloparty_state_v3';
 const CHANNEL_NAME = 'soloparty_broadcast_channel';
 
 // Helper to generate demo 1st impression & final selections for mock data
@@ -481,8 +481,8 @@ export const usePartyStore = create<PartyStoreState>((set, get) => {
       const existingSameGender = get().participants.filter((p) => p.gender === gender);
       const nextNum = existingSameGender.length + 1;
 
-      const maleNames = ['카일', '리오', '노아', '루카스', '제이든', '아서', '오스카', '하비', '마일스', '카이'];
-      const femaleNames = ['클로이', '소피', '엠버', '릴리', '마야', '엘라', '노라', '아리아', '해나', '조이'];
+      const maleNames = ['민준', '서준', '도윤', '예준', '시우', '하준', '지호', '주원', '지후', '준서'];
+      const femaleNames = ['서연', '서윤', '지우', '서현', '하은', '하윤', '민서', '지유', '윤서', '채원'];
 
       const namesPool = isMale ? maleNames : femaleNames;
       const nickname = `${namesPool[(nextNum - 1) % namesPool.length]} (${isMale ? '남' : '여'}${nextNum})`;
