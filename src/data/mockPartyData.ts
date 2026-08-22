@@ -7,7 +7,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   // 남성 8명 (테이블 1~4)
   {
     id: 'm1',
-    nickname: '호야',
+    nickname: '민준',
     gender: 'M',
     bio: '주말엔 유기견 봉사활동과 커피 로스팅을 즐깁니다 ☕',
     tableNo: 1,
@@ -17,7 +17,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm2',
-    nickname: '데이비드',
+    nickname: '서준',
     gender: 'M',
     bio: '음악 듣는 것과 맛집 탐방을 좋아해요. 진솔한 대화 원해요!',
     tableNo: 1,
@@ -27,7 +27,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm3',
-    nickname: '테리',
+    nickname: '도윤',
     gender: 'M',
     bio: '테니스와 와인을 사랑합니다. 다정한 매력의 소유자!',
     tableNo: 2,
@@ -37,7 +37,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm4',
-    nickname: '에릭',
+    nickname: '예준',
     gender: 'M',
     bio: '공간 디자인을 하고 정갈한 음식을 좋아합니다.',
     tableNo: 2,
@@ -47,7 +47,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm5',
-    nickname: '브라이언',
+    nickname: '시우',
     gender: 'M',
     bio: '동물 좋아하는 분 대환영! 따뜻하고 긍정적인 편입니다.',
     tableNo: 3,
@@ -57,7 +57,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm6',
-    nickname: '알렉스',
+    nickname: '하준',
     gender: 'M',
     bio: '러닝 매니아 🏃‍♂️ 주말 새벽마다 한강을 달립니다.',
     tableNo: 3,
@@ -67,7 +67,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm7',
-    nickname: '라이언',
+    nickname: '지호',
     gender: 'M',
     bio: '감성적인 전시회와 LP 음악 듣는 것을 좋아합니다.',
     tableNo: 4,
@@ -77,7 +77,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'm8',
-    nickname: '제이슨',
+    nickname: '준서',
     gender: 'M',
     bio: '진중하지만 위트 있는 스타일입니다. 좋은 인연 찾아요!',
     tableNo: 4,
@@ -89,7 +89,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   // 여성 8명 (테이블 1~4)
   {
     id: 'f1',
-    nickname: '루시',
+    nickname: '서연',
     gender: 'F',
     bio: '카페 투어와 미술관 관람을 좋아합니다 🎨',
     tableNo: 1,
@@ -99,7 +99,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f2',
-    nickname: '클로이',
+    nickname: '서윤',
     gender: 'F',
     bio: '솔직하고 명쾌한 편입니다. 맛있는 와인 한 잔 함께해요!',
     tableNo: 1,
@@ -109,7 +109,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f3',
-    nickname: '지아',
+    nickname: '지우',
     gender: 'F',
     bio: '트렌드에 민감하지만 사람 관계는 오래 깊게 가는 스타일!',
     tableNo: 2,
@@ -119,7 +119,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f4',
-    nickname: '엠마',
+    nickname: '서현',
     gender: 'F',
     bio: '웃음이 많고 긍정 에너지 넘칩니다 😊',
     tableNo: 2,
@@ -129,7 +129,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f5',
-    nickname: '소피아',
+    nickname: '하은',
     gender: 'F',
     bio: '요리와 홈베이킹이 취미예요. 잔잔한 대화 좋아합니다.',
     tableNo: 3,
@@ -139,7 +139,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f6',
-    nickname: '올리비아',
+    nickname: '하윤',
     gender: 'F',
     bio: '필라테스와 골프를 즐깁니다. 매너 있는 분 선호해요.',
     tableNo: 3,
@@ -149,7 +149,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f7',
-    nickname: '아이린',
+    nickname: '민서',
     gender: 'F',
     bio: '꽃처럼 아름다운 순간을 만들어가는 것을 좋아해요 💐',
     tableNo: 4,
@@ -159,7 +159,7 @@ export const INITIAL_PARTICIPANTS: Participant[] = [
   },
   {
     id: 'f8',
-    nickname: '벨라',
+    nickname: '지유',
     gender: 'F',
     bio: '에너지 넘치고 리액션이 좋은 편입니다!',
     tableNo: 4,

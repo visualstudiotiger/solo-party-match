@@ -36,7 +36,7 @@ interface PartyStoreState extends PartyState {
   getReceivedCount: (userId: string) => number;
 }
 
-const STORAGE_KEY = 'soloparty_state_v3';
+const STORAGE_KEY = 'soloparty_state_v4';
 const CHANNEL_NAME = 'soloparty_broadcast_channel';
 
 // Helper to generate demo 1st impression & final selections for mock data
